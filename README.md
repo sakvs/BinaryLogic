@@ -141,5 +141,5 @@ Think of Git like this:
 * **`git pull`** → Bring the latest snapshots from GitHub to your computer.
 
 
- > **💡 Every error is a lesson. What I experienced today is part of the daily workflow of software developers. Every Git command, merge conflict, and bug is helping me become a better engineer.**
+ > **💻 Every error is a lesson. What I experienced today is part of the daily workflow of software developers. Every Git command, merge conflict, and bug is helping me become a better engineer.**
 
