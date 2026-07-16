@@ -5,9 +5,6 @@
 
  ## 💡"What you just experienced is exactly what software developers deal with every day. Here's what you learned from this Git workflow.
 
-
-
-
 ## 1. Creating a local Git repository
 
 ```bash
