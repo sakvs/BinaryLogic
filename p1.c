@@ -1,57 +1,61 @@
-#include<stdio.h>
-
-#define MAX 20
-
-int a[MAX], x[MAX], target;
-
-void subset(int sum, int pos, int rem){
-    x[pos] = 1;
-
-    if(sum + a[pos] == target){
-        printf("Subset: ");
-        for(int i = 1; i<=pos; i++){
-            printf("%d",a[i]);
-
-        printf("\n");
-        }
-
-    }
-    else if(sum+a[pos]+a[pos+1] <= target){
-        subset(sum+a[pos],
-                pos+1,
-                rem-a[pos]);
-    }
-
-    if(sum+rem-a[pos]>= target && sum+a[pos+1]<=target)
-    {
-        x[pos] = 0;
-
-        subset(sum,
-                pos+1,
-                rem-a[pos]);
-    }
+#define INF 999
+#define MAX 100
+int p[MAX], c[MAX][MAX], t[MAX][2];
+int find(int v)
+{
+    while (p[v])
+        v = p[v];
+    return v;
 }
-
-int main(){
-    int n, total = 0, i;
-
-    printf("entre n: ");
-    scanf("%d" , &n);
-
-    printf("eNTER element in incresing order:\n");
-
-    for(int i = 1;i<=n;i++){
-        scanf("%d",a[i]);
-        total += a[i];
+void union1(int i, int j)
+{
+    p[j] = i;
+}
+void kruskal(int n)
+{
+    int i, j, k, u, v, min, res1, res2, sum = 0;
+    for (k = 1; k < n; k++)
+    {
+        min = INF;
+        for (i = 1; i < n - 1; i++)
+        {
+            for (j = 1; j <= n; j++)
+            {
+                if (i == j) continue;
+                if (c[i][j] < min)
+                {
+                    u = find(i);
+                    v = find(j);
+                    if (u != v)
+                    {
+                        res1 = i;
+                        res2 = j;
+                        min = c[i][j];
+                    }
+                }
+            }
+        }
+        union1(res1, find(res2));
+        t[k][1] = res1;
+        t[k][2] = res2;
+        sum = sum + min;
     }
-
-    printf("enter a traget sum:");
-    scanf("%d",target);
-
-    if(total < target || a[1] > target)
-        printf("no subset possibale");
-    else
-        subset(0,1,total);
+    printf("\nCost of spanning tree is=%d", sum);
+    printf("\nEdgesof spanning tree are:\n");
+    for (i = 1; i < n; i++)
+        printf("%d -> %d\n", t[i][1], t[i][2]);
+}
+int main()
+{
+    int i, j, n;
+    printf("\nEnter the n value:");
+    scanf("%d", & n);
+    for (i = 1; i <= n; i++)
+        p[i] = 0;
+    printf("\nEnter the graph data:\n");
+    for (i = 1; i <= n; i++)
+        for (j = 1; j <= n; j++)
+            scanf("%d", & c[i][j]);
+    kruskal(n);
     return 0;
-
 }

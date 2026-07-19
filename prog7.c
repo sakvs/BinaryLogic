@@ -1,86 +1,89 @@
-#include<stdio.h>
-#define max 50
+#include <stdio.h>
+#define MAX 50
 
-void greedyknapsack(int n, int w[], int p[], int mx)
-{
-    double x[max] = {0};      // solution vector
-    double ratio[max];
-    double profit = 0;
+void greedyKnapsack(int n, int w[], int p[], int capacity) {
+    double ratio[MAX];
+    double x[MAX]; // solution vector - use double for fractions
+    double maxProfit = 0.0;
+    int currentWeight = 0;
 
-    // Calculate ratio = profit/weight
-    for(int i = 0; i < n; i++)
+    // Initialize solution vector
+    for (int i = 0; i < n; i++) {
+        x[i] = 0.0;
+    }
+
+    // Calculate profit/weight ratio for each item
+    for (int i = 0; i < n; i++) {
         ratio[i] = (double)p[i] / w[i];
+    }
 
-    // Sort based on ratio
-    for(int i = 0; i < n; i++)
-    {
-        for(int j = i + 1; j < n; j++)
-        {
-            if(ratio[i] < ratio[j])
-            {
-                double temp = ratio[i];
+    // Sort items by ratio in non-increasing order
+    // Bubble sort - also swap w[] and p[] to keep them aligned
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (ratio[i] < ratio[j]) {
+                // Swap ratios
+                double tempRatio = ratio[i];
                 ratio[i] = ratio[j];
-                ratio[j] = temp;
+                ratio[j] = tempRatio;
 
-                int temp1 = w[i];
+                // Swap weights
+                int tempW = w[i];
                 w[i] = w[j];
-                w[j] = temp1;
+                w[j] = tempW;
 
-                int temp2 = p[i];
+                // Swap profits
+                int tempP = p[i];
                 p[i] = p[j];
-                p[j] = temp2;
+                p[j] = tempP;
             }
         }
     }
 
-    // Select items
-    for(int i = 0; i < n; i++)
-    {
-        if(mx > 0 && w[i] <= mx)
-        {
-            x[i] = 1;
-            profit += p[i];
-            mx -= w[i];
-        }
-        else
-        {
-            x[i] = (double)mx / w[i];
-            profit += x[i] * p[i];
-            break;
+    // Fill the knapsack
+    for (int i = 0; i < n; i++) {
+        if (currentWeight + w[i] <= capacity) {
+            // Take whole item
+            x[i] = 1.0;
+            currentWeight += w[i];
+            maxProfit += p[i];
+        } else {
+            // Take fractional part of item
+            int remaining = capacity - currentWeight;
+            x[i] = (double)remaining / w[i];
+            maxProfit += x[i] * p[i];
+            break; // knapsack is full
         }
     }
 
-    printf("\nOptimal solution for greedy method: %.21f", profit);
-
-    printf("\nSolution vector:\n");
-
-    for(int i = 0; i < n; i++)
-        printf("%.2lf\t", x[i]);
+    printf("Optimal solution for greedy method: %.2f\n", maxProfit);
+    printf("Solution vector for greedy method: ");
+    for (int i = 0; i < n; i++) {
+        printf("%.2f\t", x[i]);
+    }
+    printf("\n");
 }
 
-int main()
-{
-    int n, mx;
-    int w[max], p[max];
+int main() {
+    int n, capacity;
+    int w[MAX], p[MAX];
 
-    printf("Enter number of objects: ");
+    printf("Enter the number of objects: ");
     scanf("%d", &n);
 
-    printf("Enter profits:\n");
-    for(int i = 0; i < n; i++)
-        scanf("%d", &p[i]);
-
-    
-    printf("Enter weights:\n");
-    for(int i = 0; i < n; i++)
+    printf("Enter the objects' weights: ");
+    for (int i = 0; i < n; i++) {
         scanf("%d", &w[i]);
+    }
 
+    printf("Enter the objects' profits: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &p[i]);
+    }
 
+    printf("Enter the maximum capacity: ");
+    scanf("%d", &capacity);
 
-    printf("Enter max capacity: ");
-    scanf("%d", &mx);
-
-    greedyknapsack(n, w, p, mx);
-
+    greedyKnapsack(n, w, p, capacity);
     return 0;
 }

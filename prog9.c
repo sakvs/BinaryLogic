@@ -1,61 +1,58 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-void selectionsort(int arr[], int n){
-    int minindex;
-
-    for(int i=0;i<=n-1;i++){
-        minindex = i;
-        for(int j = i+1; i<= n; j++){
-            if(arr[j]<arr[minindex])
-            minindex = j;
+void selectionSort(int arr[], int n)
+{
+    int i, j, min_index, temp;
+    for(i = 0; i < n - 1; i++)
+    {
+        min_index = i;
+        // Find minimum element
+        for(j = i + 1; j < n; j++)
+        {
+            if(arr[j] < arr[min_index])
+            {
+                min_index = j;
+            }
         }
-        int temp = arr[i];
-        arr[i] = arr[minindex];
-        arr[minindex] = temp;
-    }
-
-
-    }
-        
-    void genrat(int arr[],int n){
-        for(int i = 0; i< n; i++){
-            arr[i] = rand() % 10000;
+        // Swap
+        temp = arr[i];
+        arr[i] = arr[min_index];
+        arr[min_index] = temp;
     }
 }
 
-int main(){
+void generateRandomNumbers(int arr[], int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        arr[i] = rand() % 10000;
+    }
+}
+int main()
+{
     int n;
-
-    printf("enytr numbert of elements: ");
-    scanf("%d",&n);
-
-    if(n<=50000){
-        printf("grater then 5000 \n");
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+    if(n <= 5000)
+    {
+        printf("Please enter a value greater than 5000\n");
         return 1;
     }
-    int *arr = (int *)malloc(n*sizeof(int));
-
-    if(arr == NULL){
+    int *arr = (int *)malloc(n * sizeof(int));
+    if(arr == NULL)
+    {
         printf("Memory allocation failed\n");
         return 1;
     }
-
-    genrat(arr , n);
-
-    clock_t s = clock();
-
-    selectionsort(arr, n);
-
-    clock_t e = clock();
-
-    double time_taken = ((double)(e-s))/ CLOCKS_PER_SEC;
-
-    printf("time to sort %d elements: %f seconds\n",n,time_taken);
-
+    generateRandomNumbers(arr, n);
+    clock_t start = clock();
+    selectionSort(arr, n);
+    clock_t end = clock();
+    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Time taken to sort %d elements: %f seconds\n",
+           n, time_taken);
     free(arr);
-
     return 0;
-
 }
